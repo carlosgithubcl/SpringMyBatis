@@ -1,0 +1,139 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <f:event type="preRenderView" listener="#{beanProfesor.verificarSesion()}" />
+
+    <style>
+        .opciones {
+            overflow:hidden;
+            text-align: center;
+            margin:auto;
+        }
+        .tabla {
+            display:inline-table;
+            padding:5px;
+            text-align: left;
+            height:40px;
+        }
+    </style>
+    <title>Mantenedor Curso</title>
+</h:head>
+<h:body>
+
+    <h:form id="form" rendered="true">
+        <p:growl id="msgs" showDetail="true" />
+        <p:separator />
+            <h:panelGrid columns="2">
+                <p:commandButton action="#{beanProfesor.logout}" value="Logout"/>
+                <p:outputLabel value="Usuario: #{beanProfesor.profesor.username}" />
+            </h:panelGrid >
+        <p:separator />
+
+        <p:dataTable id="basicDT" var="curso" value="#{beanCurso.selectedCursos}" rendered="true">
+            <p:ajax event="cellEdit" update=":form:basicDT" />
+
+            <f:facet name="header">
+                Mantenedor Cursos
+            </f:facet>
+            <p:column headerText="Id">
+                <h:outputText value="#{curso.id}" />
+            </p:column>
+            <p:column headerText="Titulo">
+                <h:outputText value="#{curso.titulo}" />
+            </p:column>
+            <p:column headerText="Nivel">
+                <h:outputText value="#{curso.nivel}" />
+            </p:column>
+            <p:column headerText="Horas">
+                <h:outputText value="#{curso.horas}" />
+            </p:column>
+
+            <p:column style="width:32px;text-align: center">
+                <p:commandButton update=":form:carDetail" oncomplete="PF('editarCursoDialog').show()" icon="ui-icon-pencil">
+                    <f:setPropertyActionListener value="#{curso}" target="#{beanCurso.selectedCurso}" />
+                </p:commandButton>
+            </p:column>
+
+        </p:dataTable>
+
+        <p:dialog header="Editar Curso" widgetVar="editarCursoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" update="form">
+            <p:outputPanel id="carDetail" style="text-align:center;">
+                <p:panelGrid columns="2" rendered="#{not empty beanCurso.selectedCurso}" columnClasses="label,value">
+                    <h:outputText value="Id:" />
+                    <h:outputText value="#{beanCurso.selectedCurso.id}" />
+                    <h:outputText value="Titulo:" />
+                    <h:inputText value="#{beanCurso.selectedCurso.titulo}" />
+                    <h:outputText value="Nivel:" />
+                    <h:inputText value="#{beanCurso.selectedCurso.nivel}"/>
+                    <h:outputText value="Horas:" />
+                    <h:inputText value="#{beanCurso.selectedCurso.horas}"/>
+                </p:panelGrid>
+            </p:outputPanel>
+            <p:separator />
+
+            <p:commandButton value="Update Row" id="nonAjax" actionListener="#{beanCurso.update}"  ajax="false" update="form:basicDT" oncomplete="handleComplete(xhr, status, args)"/>
+
+            <p:separator />
+
+            <p:commandButton value="Delete Row" id="btnDelete" actionListener="#{beanCurso.delete}" ajax="false" update="form:basicDT" oncomplete="handleComplete(xhr, status, args)"/>
+
+            <p:separator />
+
+            <p:ajax event="close" update="form:basicDT"/>
+        </p:dialog>
+
+
+    </h:form>
+
+    <h:form id="form2">
+        <p:separator />
+
+        <p:commandButton value="Nuevo Curso" update=":form:basicDT" oncomplete="PF('nuevoCursoDialog').show()" icon="ui-icon-plus" >
+        </p:commandButton>
+
+        <p:separator />
+
+
+        <p:dialog header="Agregar Curso" widgetVar="nuevoCursoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" update=":form:basicDT">
+            <div class="tabla">
+                <p:panel id="panel" header="Añadir curso">
+
+                    <h:panelGrid columns="2" cellpadding="20">
+
+                        <h:outputText value="Activo: " />
+                        <p:selectBooleanCheckbox value="#{beanCurso.addCurso.activo}" />
+
+                        <p:outputLabel for="ProfesorMenu" value="Profesor" />
+                        <p:selectOneMenu id="ProfesorMenu" value="#{beanCurso.addCurso.idProfesor}">
+                            <f:selectItems value="#{beanProfesor.consultarProfesores()}"
+                                           var="profe" itemLabel="#{profe.nombre}" itemValue="#{profe.id}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="titulo" value="Título"/>
+                        <p:inputText id="titulo" value="#{beanCurso.addCurso.titulo}" required="true" label="titulo">
+                            <f:validateLength minimum="2" />
+                        </p:inputText>
+
+                        <p:outputLabel for="nivelMenu" value="Nivel" />
+                        <p:selectOneMenu id="nivelMenu" value="#{beanCurso.addCurso.nivel}">
+                            <f:selectItem itemLabel="Básico" itemValue="Básico" />
+                            <f:selectItem itemLabel="Intermedio" itemValue="Intermedio" />
+                            <f:selectItem itemLabel="Avanzado" itemValue="Avanzado" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel value="Horas"/>
+                        <p:spinner min="1" max="999" size="3" value="#{beanCurso.addCurso.horas}"/>
+
+                        <p:commandButton value="Enviar" action="#{beanCurso.insertarCurso()}" ajax="false" update="form:basicDT" oncomplete="handleComplete(xhr, status, args)"/>
+
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+            <p:ajax event="close" update="form:basicDT"/>
+        </p:dialog>
+    </h:form>
+
+</h:body>
+</html>

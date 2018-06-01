@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+<h:form id="form">
+    <p:growl id="msgs" showDetail="true"/>
+
+    <p:dataTable id="listadoCursos" var="curso" value="#{beanCurso.listadoCursos}" editable="true" style="margin-bottom:20px">
+        <f:facet name="header">
+            Row Editing
+        </f:facet>
+
+        <p:ajax event="rowEdit" listener="#{beanCurso.onRowEdit}" update=":form:msgs" />
+        <p:ajax event="rowEditCancel" listener="#{beanCurso.onRowCancel}" update=":form:msgs" />
+
+        <p:column headerText="titulo">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{curso.titulo}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{curso.titulo}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="nivel">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{curso.nivel}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{curso.nivel}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="horas">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{curso.horas}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{curso.horas}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column style="width:32px">
+            <p:rowEditor />
+        </p:column>
+    </p:dataTable>
+
+    <p:dataTable id="cars2" var="curso" value="#{beanCurso.listadoCursos}" editable="true" editMode="cell" widgetVar="cellCars">
+        <f:facet name="header">
+            Cell Editing with Click and RightClick
+        </f:facet>
+
+        <p:ajax event="cellEdit" listener="#{beanCurso.onCellEdit}" update=":form:msgs" />
+
+        <p:column headerText="titulo">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{curso.titulo}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{curso.titulo}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="nivel">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{curso.nivel}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{curso.nivel}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column headerText="horas">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{curso.horas}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{curso.horas}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+    </p:dataTable>
+
+    <p:contextMenu for="cars2" widgetVar="cMenu">
+        <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('cellCars').showCellEditor();return false;"/>
+        <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>
+    </p:contextMenu>
+
+
+</h:form>
+
+</body>
+</html>

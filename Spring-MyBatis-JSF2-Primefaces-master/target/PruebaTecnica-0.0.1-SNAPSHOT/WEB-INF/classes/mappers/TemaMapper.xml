@@ -1,0 +1,15 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.integracion.mapper.DaoTema">
+
+	 <resultMap id="Tema" type="com.app.integracion.model.Tema">
+	 	<id property="id" column="id" />
+	 	<result property="nombre" column="nombre" />
+	 	<result property="idCurso" column="idCurso" />
+	 </resultMap>
+  
+      <select id="consultarTemasCurso" resultMap="Tema"  >
+    	SELECT * FROM tema where idCurso = #{id_curso}
+    </select>
+</mapper>

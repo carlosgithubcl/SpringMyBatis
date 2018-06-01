@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.integracion.mapper.DaoCurso">
+
+ <resultMap type='com.app.integracion.model.Curso' id='Curso'>
+    <id property='id' column='id'/>
+    <result property='activo' column='activo'/>
+    <result property='titulo' column='titulo'/>
+    <result property='nivel' column='nivel'/>
+    <result property='horas' column='horas'/>
+     <result property='idProfesor' column='idProfesor'/>
+   </resultMap>
+
+    <select id="consultarTodos" resultMap="Curso"  >
+    	select * from curso where activo = 1
+    	order by id
+    </select>
+    
+    <insert id="insert" parameterType="com.app.integracion.model.Curso">
+		insert into curso
+		(id,activo,titulo,nivel,horas,idProfesor)
+		values
+		(id_curso.nextval,#{activo},#{titulo},#{nivel},#{horas},#{idProfesor})
+	</insert>
+
+    <update id="update" parameterType="com.app.integracion.model.Curso">
+        update curso
+        set titulo =#{titulo},nivel=#{nivel},horas=#{horas}
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="com.app.integracion.model.Curso">
+        delete from curso where id = #{id}
+    </delete>
+
+   </mapper>

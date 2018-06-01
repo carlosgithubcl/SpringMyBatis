@@ -1,0 +1,71 @@
+ <h:form id="form11">
+        <p:growl id="msgs" showDetail="true"/>
+
+        <p:dataTable id="listado"
+                     var="curso" value="#{beanCurso.listadoCursos}"
+                     editable="true"
+                     style="margin-bottom:20px"
+                     resizableColumns="true" resizeMode="expand"
+
+                     rowKey="#{curso.id}"
+                     selectionMode="single"
+                     selection="#{beanCurso.curso}"
+
+                     filteredValue="#{beanCurso.filteredCursos}"
+                    >
+            <f:facet name="header">
+                Editor de Filas
+            </f:facet>
+
+            <p:ajax event="rowEdit" listener="#{beanCurso.onRowEdit}" update=":form:msgs" />
+            <p:ajax event="rowEditCancel" listener="#{beanCurso.onRowCancel}" update=":form:msgs" />
+
+
+
+            <p:column headerText="titulo" sortBy="#{curso.titulo}" filterBy="#{curso.titulo}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{curso.titulo}" /></f:facet>
+                    <f:facet name="input"><p:inputText id="modelInput" value="#{curso.titulo}" style="width:100%"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="nivel" sortBy="#{curso.nivel}" filterBy="#{curso.nivel}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{curso.nivel}" /></f:facet>
+                    <f:facet name="input"><p:inputText id="modelInput" value="#{curso.nivel}" style="width:100%"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column headerText="horas" sortBy="#{curso.horas}" filterBy="#{curso.horas}">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{curso.horas}" /></f:facet>
+                    <f:facet name="input"><p:inputText id="modelInput" value="#{curso.horas}" style="width:100%"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column style="width:32px;text-align: center">
+                <p:commandButton update=":form:listado" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="View">
+                    <f:setPropertyActionListener value="#{curso}" target="#{beanCurso.selectedCurso}" />
+                </p:commandButton>
+            </p:column>
+
+
+            <p:column style="width:32px">
+                <p:rowEditor />
+            </p:column>
+
+        </p:dataTable>
+
+        <p:commandButton value="Modal" type="button" onclick="PF('dlg2').show();" />
+
+
+
+        <p:dialog header="Selected Cars" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="220">
+            <p:outputPanel id="multiCarDetail" style="text-align:center;">
+                <ui:repeat value="#{beanCurso.selectedCursos}" var="curso">
+                    <h:outputText value="#{curso.id} - #{curso.titulo}" style="display:block"/>
+                </ui:repeat>
+            </p:outputPanel>
+        </p:dialog>
+
+    </h:form>

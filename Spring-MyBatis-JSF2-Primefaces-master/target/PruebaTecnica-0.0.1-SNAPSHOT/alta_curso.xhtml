@@ -1,0 +1,71 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>	
+<style>
+.opciones {
+    overflow:hidden;
+    text-align: center;
+    margin:auto;
+}
+.tabla {
+    display:inline-table;
+    padding:5px;
+    text-align: left;
+    height:40px;
+}
+</style>
+</h:head>
+<h:body>
+<div class="opciones" >
+<h:form id="formAddCurso">
+<div class="tabla">
+    <p:panel id="panel" header="Añadir curso">
+        <p:messages id="messages" />
+        <h:panelGrid columns="2" cellpadding="20">
+
+            <h:outputText value="#{beanProfesor.getProfe()}" />
+
+            <br/>
+
+			<h:outputText value="Activo: " />
+			<p:selectBooleanCheckbox value="#{beanCurso.addCurso.activo}" />
+            
+			<p:outputLabel for="ProfesorMenu" value="Profesor" />
+		    <p:selectOneMenu id="ProfesorMenu" value="#{beanCurso.addCurso.idProfesor}">
+		    <f:selectItems value="#{beanProfesor.consultarProfesores()}"
+    			var="profe" itemLabel="#{profe.nombre}" itemValue="#{profe.id}" />
+		    </p:selectOneMenu>
+ 
+			<p:outputLabel for="titulo" value="Título"/>
+				<p:inputText id="titulo" value="#{beanCurso.addCurso.titulo}" required="true" label="titulo">
+					<f:validateLength minimum="2" />
+				</p:inputText>	
+
+			<p:outputLabel for="nivelMenu" value="Nivel" />
+		    <p:selectOneMenu id="nivelMenu" value="#{beanCurso.addCurso.nivel}">
+		        <f:selectItem itemLabel="Básico" itemValue="Básico" />
+		        <f:selectItem itemLabel="Intermedio" itemValue="Intermedio" />
+		        <f:selectItem itemLabel="Avanzado" itemValue="Avanzado" />
+		    </p:selectOneMenu>
+			
+			<h:outputLabel value="Horas"/>
+			<p:spinner min="1" max="999" size="3" value="#{beanCurso.addCurso.horas}"/>
+        
+    		<p:commandButton value="Enviar" update="formAddCurso"  oncomplete="redirect()" action="#{beanCurso.insertarCurso()}" />
+        </h:panelGrid>
+    </p:panel>
+ </div>
+</h:form>
+</div>
+<script type="text/javascript">
+  redirect = function() {
+ 	 setTimeout(function() { 
+ 	        window.location.href = 'index.xhtml';
+ 	   }, 1500);         
+  }
+</script>
+</h:body>
+</html>

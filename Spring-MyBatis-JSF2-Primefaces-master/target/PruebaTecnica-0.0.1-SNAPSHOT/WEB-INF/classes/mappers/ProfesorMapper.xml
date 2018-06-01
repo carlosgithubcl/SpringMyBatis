@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.integracion.mapper.DaoProfesor">
+
+<resultMap  type='com.app.integracion.model.Profesor' id="Profesor">
+    <id property='id' column='id'/>
+    <result property='nombre' column='nombre'/>
+    <result property='username' column='username'/>
+    <result property='pass' column='pass'/>
+</resultMap>
+ 
+ <select id="consultarTodos" resultMap="Profesor">
+     SELECT * FROM profesor
+ </select>
+
+
+    <select id="getProfe" parameterType="com.app.integracion.model.Profesor" resultMap="Profesor">
+        SELECT * FROM profesor
+        where pass=#{pass} and
+        username =#{username}
+    </select>
+
+</mapper>
